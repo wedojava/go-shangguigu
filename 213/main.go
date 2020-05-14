@@ -3,12 +3,15 @@ package main
 import "fmt"
 
 type Computer struct {
+	rate float64
 }
 
 type Phone struct {
+	Num int
 }
 
 type Camera struct {
+	Name string
 }
 
 type IUsb interface {
@@ -17,7 +20,7 @@ type IUsb interface {
 }
 
 func (p Phone) Start() {
-	fmt.Println("Phone start")
+	fmt.Println("Phone start", p.Num)
 }
 
 func (p Phone) Stop() {
@@ -25,7 +28,7 @@ func (p Phone) Stop() {
 }
 
 func (c Camera) Start() {
-	fmt.Println("Camera start")
+	fmt.Println("Camera start", c.Name)
 }
 
 func (c Camera) Stop() {
