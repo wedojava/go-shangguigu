@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func putNum(intChan chan int) {
 	for i := 0; i < 8000; i++ {
@@ -38,6 +41,8 @@ func main() {
 	primeChan := make(chan int, 8000)
 	exitChan := make(chan bool, 4)
 
+	start := time.Now().Unix()
+
 	// 开启一个 goroutine 向 intChan 放入 1-8000
 	go putNum(intChan)
 	// 开启4个 goroutine 从 intChan 取出数据，并判断是否为 prime 然后放入 primeChan
@@ -50,7 +55,7 @@ func main() {
 		}
 		close(primeChan)
 	}()
-
+	end := time.Now().Unix()
 	// 遍历获得结果
 	for {
 		res, ok := <-primeChan
@@ -60,4 +65,5 @@ func main() {
 		fmt.Printf("prime=%d\n", res)
 	}
 	fmt.Println("done.")
+	fmt.Println("使用4个协程耗时：", end-start)
 }
