@@ -47,7 +47,9 @@ func treat(n int, srcCh chan int, desCh chan map[int]int) {
 
 func printCh(desCh chan map[int]int) {
 	for des := range desCh {
-		fmt.Println(des)
+		for k, v := range des {
+			fmt.Printf("key: %d, val: %d\n", k, v)
+		}
 	}
 }
 
@@ -59,7 +61,6 @@ func main() {
 	go save(numChan)
 	// 2. 启动8个协程，从numChan取出数(比如n)，并计算 1+...+n的值，并存放到resChan
 	treat(8, numChan, resChan)
-	// time.Sleep(10 * time.Second)
 	i := 0
 	for {
 		done, ok := <-exitChan
