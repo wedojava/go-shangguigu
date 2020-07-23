@@ -61,21 +61,12 @@ func main() {
 	go save(numChan)
 	// 2. 启动8个协程，从numChan取出数(比如n)，并计算 1+...+n的值，并存放到resChan
 	treat(8, numChan, resChan)
-	i := 0
-	for {
-		done, ok := <-exitChan
-		if !ok {
-			continue
+	go func() {
+		for i := 0; i < 8; i++ {
+			<-exitChan
 		}
-		if done {
-			i++
-		}
-		if i == 8 {
-			break
-		}
-	}
-	close(exitChan)
-	close(resChan)
+		close(resChan)
+	}()
 	// 3. 最后8个协程协同完成工作后，再遍历resChan，显示结果
 	printCh(resChan)
 }
